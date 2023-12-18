@@ -4,62 +4,64 @@ function getComputerChoice() {
     return choices[index];
 }
 
-function playRound(playerSelection, computerSelection) {
-    playerSelection = playerSelection.toLowerCase();
-    playerSelection = playerSelection.charAt(0).toUpperCase() 
-                        + playerSelection.slice(1);
-    if (playerSelection == computerSelection) {
-        return `It's a Draw! The computer also picked ${playerSelection} `
-    } else {
-        switch (playerSelection) {
-            case "Rock":
-                if (computerSelection == "Scissors") {
-                    return "You Win! Rock beats Scissors";
-                } else {
-                    return "You Lose! Paper beats Rock";
-                }
-            case "Paper":
-                if (computerSelection == "Rock") {
-                    return "You Win! Paper beats Rock";
-                } else {
-                    return "You Lose! Scissors beats Paper";
-                }
-            case "Scissors":
-                if (computerSelection == "Paper") {
-                    return "You Win! Scissors beats Paper";
-                } else {
-                    return "You Lose! Rock beats Scissors";
-                }
-            default:
-                throw new Error("Non-valid player selection!");
-        }
+function getRoundResult(playerSelection, computerSelection) {
+    if (playerSelection == computerSelection)
+        return `It's a Draw! The computer also picked ${playerSelection}.`;
+    const winningCombinations = new Set([["Rock", "Scissors"].toString(), 
+    ["Paper", "Rock"].toString(), ["Scissors", "Paper"].toString()]);
+    return (winningCombinations.has([playerSelection, computerSelection].toString())) 
+        ? `You Win! ${playerSelection} beats ${computerSelection}.`
+        : `You Lose! ${computerSelection} beats ${playerSelection}.`;
+}
+
+function playOneRound(playerSelection) {
+    computerSelection = getComputerChoice();
+    result = getRoundResult(playerSelection, computerSelection);
+    if (result.startsWith("You Win!")) {
+        playerWins += 1;
+    } else if (result.startsWith("You Lose!")) {
+        computerWins += 1;
+    }
+    resultDiv.textContent = result;
+    if (playerWins == 5) {
+        playerWins = 0;
+        computerWins = 0;
+        winnerDiv.textContent = "Player";
+        resultDiv.textContent += " Player Won!";
+    } else if (computerWins == 5) {
+        playerWins = 0;
+        computerWins = 0;
+        winnerDiv.textContent = "Computer";
+        resultDiv.textContent += " Computer Won!";
     }
 }
 
-function game() {
-    let playerWins = 0;
-    let computerWins = 0;
-    let result;
-
-    for (let i = 0; i < 5; i++) {
-        playerSelection = prompt("Rock, paper, scissors?");
-        computerSelection = getComputerChoice();
-        result = playRound(playerSelection, computerSelection);
-        if (result.startsWith("You Win!")) {
-            playerWins += 1;
-        } else if (result.startsWith("You Lose!")) {
-            computerWins += 1;
-        }
-        console.log(result);
-    }
-
-    if (playerWins > computerWins) {
-        console.log(`You win the game! You won ${playerWins} times, while the computer only won ${computerWins} times.`);
-    } else if (computerWins > playerWins) {
-        console.log(`You lose the game! You won ${playerWins} times, while the computer won ${computerWins} times.`);
-    } else {
-        console.log(`You drew the game! You and the computer both won ${playerWins} times.`);
-    }
+function setScores() {
+    playerScoreDiv.textContent = playerWins;
+    computerScoreDiv.textContent = computerWins;
 }
 
-game()
+let playerWins = 0;
+let computerWins = 0;
+
+const rockButton = document.querySelector('.rockButton');
+const paperButton = document.querySelector('.paperButton');
+const scissorsButton = document.querySelector('.scissorsButton');
+const resultDiv = document.querySelector('.resultDiv');
+
+rockButton.addEventListener('click', (e) => {
+    playOneRound('Rock');
+    setScores();
+});
+paperButton.addEventListener('click', (e) => {
+    playOneRound('Paper');
+    setScores();
+});
+scissorsButton.addEventListener('click', (e) => {
+    playOneRound('Scissors');
+    setScores();
+});
+
+playerScoreDiv = document.querySelector('#PlayerScore');
+computerScoreDiv = document.querySelector('#ComputerScore');
+winnerDiv = document.querySelector('#Winner');

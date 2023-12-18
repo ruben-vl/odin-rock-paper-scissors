@@ -1,0 +1,50 @@
+.break {
+    flex-basis: 100%;
+    height: 0;
+}
+
+.buttonContainer {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    text-align: center;
+}
+
+.buttonDiv {
+    flex-grow: 1;
+}
+
+.button {
+    width: 150px;
+    height: 100px;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.scoreDivs {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    text-align: center;
+}
+
+.resultDiv {
+    flex-basis: 100%;
+    text-align: center;
+}
+
+.high {
+    height: 100px;
+}
+
+.title {
+    height: 50px;
+}
+
+.score {
+    height: 50px;
+}
